@@ -2,23 +2,25 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-<<<<<<< HEAD
-//e
-=======
 // Hello, world!
 // This is Zoey's branch!
 //// Eric
 // Chen
->>>>>>> main
 
 package frc.robot.subsystems;
+
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ExampleSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
+  private final TalonFX m_shootMotor;
+
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+  public ShooterSubsystem() {
+    m_shootMotor = new TalonFX(0);
+  }
 
   /**
    * Example command factory method.
@@ -43,6 +45,14 @@ public class ExampleSubsystem extends SubsystemBase {
     // Query some boolean state, such as a digital sensor.
     return false;
   }
+
+  public void setShooterSpeed(double speed) {
+    double mySpeed = Math.abs(speed);
+
+    m_shootMotor.set(mySpeed);
+  }
+
+  
 
   @Override
   public void periodic() {
