@@ -48,12 +48,12 @@ public class DriveForTimeChen extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_Timer.get() < m_runTime / 3) {
-      m_drivetrain.tankDrive(m_leftSpeed, m_rightSpeed); // drive forwards
-    } else if (m_Timer.get() > m_runTime / 3 && m_Timer.get() < m_runTime / 2) { 
-      m_drivetrain.tankDrive(m_leftSpeed, () -> -m_rightSpeed.getAsDouble()); // rotate
-    } else if (m_Timer.get() > m_runTime / 2) {
-      m_drivetrain.tankDrive(() -> -m_leftSpeed.getAsDouble(), () -> -m_rightSpeed.getAsDouble()); // drive backwards
+    if (m_Timer.get() < m_runTime / 3) { // at 1 third of the time drive forward
+      m_drivetrain.tankDrive(m_leftSpeed, m_rightSpeed); 
+    } else if (m_Timer.get() > m_runTime / 3 && m_Timer.get() < m_runTime / 2) {  // after 1 third and before half time rotate
+      m_drivetrain.tankDrive(m_leftSpeed, () -> -m_rightSpeed.getAsDouble()); 
+    } else if (m_Timer.get() > m_runTime / 2) { // after half drive backwards rest of time drive backwards
+      m_drivetrain.tankDrive(() -> -m_leftSpeed.getAsDouble(), () -> -m_rightSpeed.getAsDouble()); 
     }
   }
 
