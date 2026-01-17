@@ -19,7 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public ShooterSubsystem() {
-    m_shootMotor = new TalonFX(0);
+    m_shootMotor = new TalonFX(frc.robot.Constants.CAN.SHOOTER_MOTOR);
   }
 
   /**

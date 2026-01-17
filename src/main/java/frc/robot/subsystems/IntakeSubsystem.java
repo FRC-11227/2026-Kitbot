@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public IntakeSubsystem() {
-    m_feedMotor = new TalonFX(1);
+    m_feedMotor = new TalonFX(frc.robot.Constants.CAN.INTAKE_MOTOR);
   }
 
   /**
