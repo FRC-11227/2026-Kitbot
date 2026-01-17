@@ -54,6 +54,7 @@ public class DriveForTime extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drivetrain.tankDrive(() -> 0, () -> 0);
     m_Timer.stop();
   }
 
