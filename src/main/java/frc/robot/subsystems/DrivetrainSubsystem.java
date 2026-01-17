@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -14,6 +16,9 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import frc.robot.Constants.CANConstants;
+import frc.robot.Constants.DriveConstants;;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   private final SparkMax m_leftLead;
@@ -25,76 +30,62 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
-    m_leftLead = new SparkMax(frc.robot.Constants.CAN.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushless);
-    m_leftFollow = new SparkMax(frc.robot.Constants.CAN.DRIVETRAIN_LEFT_FOLLOW, MotorType.kBrushless);
-    m_rightLead = new SparkMax(frc.robot.Constants.CAN.DRIVETRAIN_RIGHT_LEAD, MotorType.kBrushless);
-    m_rightFollow = new SparkMax(frc.robot.Constants.CAN.DRIVETRAIN_RIGHT_FOLLOW, MotorType.kBrushless);
+    m_leftLead = new SparkMax(CANConstants.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushless);
+    m_leftFollow = new SparkMax(CANConstants.DRIVETRAIN_LEFT_FOLLOW, MotorType.kBrushless);
+    m_rightLead = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_LEAD, MotorType.kBrushless);
+    m_rightFollow = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_FOLLOW, MotorType.kBrushless);
 
-    SparkMaxConfig globalConfig = new SparkMaxConfig();
+    SparkMaxConfig config = new SparkMaxConfig();
 
-    SparkMaxConfig leftLeadConfig = new SparkMaxConfig();
-    SparkMaxConfig leftFollowerConfig = new SparkMaxConfig();
-    SparkMaxConfig rightLeadConfig = new SparkMaxConfig();
-    SparkMaxConfig rightFollowerConfig = new SparkMaxConfig();
+    config
+        .voltageCompensation(12)
+        .smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT)
+        .idleMode(SparkMaxConfig.IdleMode.kBrake);
 
-    globalConfig
-        .idleMode(SparkMaxConfig.IdleMode.kBrake)
-        .smartCurrentLimit(40);
+    config.follow(m_leftLead);
+    m_leftFollow.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    leftLeadConfig
-        .apply(globalConfig);
-    
-    leftFollowerConfig
-        .apply(globalConfig)
-        .follow(m_leftLead);
+    config.follow(m_rightLead);
+    m_rightFollow.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    rightLeadConfig
-        .apply(globalConfig)
-        .inverted(true);
+    config.disableFollowerMode();
+    m_leftLead.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    rightFollowerConfig
-        .apply(globalConfig)
-        .follow(m_rightLead);
-
-    m_leftLead.configure(leftLeadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_leftFollow.configure(leftFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_rightLead.configure(rightLeadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    m_rightFollow.configure(rightFollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.inverted(true);
+    m_rightLead.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     m_drivetrain = new DifferentialDrive(m_leftLead, m_rightLead);
   }
 
   /**
-   * Example command factory method.
-   *
-   * @return a command
+   * Stops the drivetrain and sets all motors to 0
    */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  public Command stopDrive() {
+    return this.run(
+      () -> m_drivetrain.tankDrive(0, 0)
+    );
   }
 
   /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
+   * Control the robot using an "Arcade Drive" style of control
+   * 
+   * @param speed Forward-back speed of the robot (where -1.0 is full backwards, and 1.0 is full forwards)
+   * @param rotation Left-right speed of the robot (where -1.0 is full left, and 1.0 is full right)
    */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  public Command driveArcade(DoubleSupplier speed, DoubleSupplier rotation) {
+    return this.run(
+      () -> m_drivetrain.curvatureDrive(speed.getAsDouble(), rotation.getAsDouble(), true));
   }
 
-
-  public void drive(double speed, double rotation) {
-    m_drivetrain.curvatureDrive(speed, rotation, true);
-  }
-
-  public void tankDrive(double leftSpeed, double rightSpeed) {
-    m_drivetrain.tankDrive(leftSpeed, rightSpeed);
+  /**
+   * Control the robot using a "Tank Drive" style of control
+   * 
+   * @param leftSpeed Speed for the left wheels of the robot (where -1.0 is full backwards, and 1.0 is full forwards)
+   * @param rotation Speed for the right wheels of the robot (where -1.0 is full left, and 1.0 is full right)
+   */
+  public Command driveTank(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
+    return this.run(
+      () -> m_drivetrain.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble()));
   }
 
   @Override

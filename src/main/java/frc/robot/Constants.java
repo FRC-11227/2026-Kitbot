@@ -17,7 +17,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
-  public static class CAN {
+  public static class CANConstants {
+    // CAN IDs of all devices in system
     public static final int DRIVETRAIN_LEFT_LEAD = 1;
     public static final int DRIVETRAIN_LEFT_FOLLOW = 2;
     public static final int DRIVETRAIN_RIGHT_LEAD = 3;
@@ -25,5 +26,11 @@ public final class Constants {
     public static final int SHOOTER_MOTOR = 5;
     public static final int FEEDER_MOTOR = 6;
     public static final int INTAKE_MOTOR = 7;
+  }
+
+  public static class DriveConstants {
+    // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
+    // likelihood of tripping breakers or damaging CIM motors
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
   }
 }

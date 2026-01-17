@@ -5,18 +5,16 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static Command exampleAuto(ShooterSubsystem subsystem) {
-    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-  }
-
-  public static Command runFiveSec(DrivetrainSubsystem subsystem) {
-    return new DriveForTime(subsystem,0.5, 0.5, 5.0);
+  public static Command driveAndTurn(DrivetrainSubsystem drive) {
+    return Commands.sequence(
+        drive.driveArcade(() -> 0.5, () -> 0).withTimeout(2),
+        drive.stopDrive().withTimeout(1),
+        drive.driveArcade(() -> 0, () -> 0.3).withTimeout(1)
+    );
   }
 
   private Autos() {

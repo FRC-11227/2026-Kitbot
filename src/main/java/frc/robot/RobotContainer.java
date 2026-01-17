@@ -35,10 +35,7 @@ public class RobotContainer {
     configureBindings();
 
     m_DrivetrainSubsystem.setDefaultCommand(
-      Commands.run(
-        () -> m_DrivetrainSubsystem.drive(m_driverController.getLeftY(), m_driverController.getLeftX()),
-        m_DrivetrainSubsystem
-      )
+        m_DrivetrainSubsystem.driveArcade(m_driverController::getLeftY, m_driverController::getLeftX)
     );
   }
 
@@ -68,6 +65,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.runFiveSec(m_DrivetrainSubsystem);
+    return Autos.driveAndTurn(m_DrivetrainSubsystem);
   }
 }
