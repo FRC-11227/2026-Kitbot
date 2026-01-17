@@ -16,7 +16,7 @@ public final class Autos {
   }
 
   public static Command runFiveSec(DrivetrainSubsystem subsystem) {
-    return new DriveForTime(subsystem, () -> 0.5, () -> 0.5, 5.0);
+    return new DriveForTime(subsystem,0.5, 0.5, 5.0);
   }
 
   private Autos() {

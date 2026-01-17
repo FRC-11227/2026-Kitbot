@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import java.util.function.DoubleSupplier;
-
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
@@ -91,18 +89,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
 
-  public Command drive(DoubleSupplier speed, DoubleSupplier rotation) {
-    return run(
-        () -> {
-            m_drivetrain.curvatureDrive(speed.getAsDouble(), rotation.getAsDouble(), true);
-        });
+  public void drive(double speed, double rotation) {
+    m_drivetrain.curvatureDrive(speed, rotation, true);
   }
 
-  public Command tankDrive(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
-    return run(
-        () -> {
-            m_drivetrain.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble());
-        });
+  public void tankDrive(double leftSpeed, double rightSpeed) {
+    m_drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 
   @Override

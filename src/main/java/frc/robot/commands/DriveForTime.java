@@ -6,8 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -15,8 +13,8 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveForTime extends Command {
   @SuppressWarnings("PMD.UnusedPrivateField")
   private final DrivetrainSubsystem m_drivetrain;
-  private final DoubleSupplier m_leftSpeed;
-  private final DoubleSupplier m_rightSpeed;
+  private final double m_leftSpeed;
+  private final double m_rightSpeed;
   private final double m_runTime;
 
   private final Timer m_Timer;
@@ -27,7 +25,7 @@ public class DriveForTime extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveForTime(DrivetrainSubsystem drivetrain, DoubleSupplier leftSpeed, DoubleSupplier rightSpeed, double runTime) {
+  public DriveForTime(DrivetrainSubsystem drivetrain, double leftSpeed, double rightSpeed, double runTime) {
     m_drivetrain = drivetrain;
     m_leftSpeed = leftSpeed;
     m_rightSpeed = rightSpeed;
@@ -42,6 +40,7 @@ public class DriveForTime extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("I am running");
     m_Timer.start();
   }
 
@@ -54,7 +53,7 @@ public class DriveForTime extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.tankDrive(() -> 0, () -> 0);
+    m_drivetrain.tankDrive(0, 0);
     m_Timer.stop();
   }
 

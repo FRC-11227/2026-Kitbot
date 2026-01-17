@@ -10,6 +10,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -34,7 +35,10 @@ public class RobotContainer {
     configureBindings();
 
     m_DrivetrainSubsystem.setDefaultCommand(
-      m_DrivetrainSubsystem.drive(m_driverController::getLeftX, m_driverController::getLeftY)
+      Commands.run(
+        () -> m_DrivetrainSubsystem.drive(m_driverController.getLeftY(), m_driverController.getLeftX()),
+        m_DrivetrainSubsystem
+      )
     );
   }
 
