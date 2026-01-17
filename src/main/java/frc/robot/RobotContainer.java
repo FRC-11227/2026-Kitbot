@@ -6,11 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -23,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_DrivetrainSubsystem = new DrivetrainSubsystem();
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -32,7 +28,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
+    // configureBindings();
 
     m_DrivetrainSubsystem.setDefaultCommand(
         m_DrivetrainSubsystem.driveArcade(m_driverController::getLeftY, m_driverController::getLeftX)
@@ -48,15 +44,15 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_shooterSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_shooterSubsystem));
+  // private void configureBindings() {
+  //   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+  //   new Trigger(m_shooterSubsystem::exampleCondition)
+  //       .onTrue(new ExampleCommand(m_shooterSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_shooterSubsystem.exampleMethodCommand());
-  }
+  //   // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+  //   // cancelling on release.
+  //   m_driverController.b().whileTrue(m_shooterSubsystem.exampleMethodCommand());
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
