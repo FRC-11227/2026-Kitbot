@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,7 +33,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    
+    SmartDashboard.putData(m_DrivetrainSubsystem);
+    SmartDashboard.putData(m_BallSubsystem);
   }
 
   /**
@@ -71,6 +73,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.driveAndTurn(m_DrivetrainSubsystem);
+    return Autos.shootAndBackup(m_DrivetrainSubsystem, m_BallSubsystem);
   }
 }

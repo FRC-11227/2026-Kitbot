@@ -66,7 +66,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /**
    * Stops the drivetrain and sets all motors to 0
    */
-  public Command stopDrive() {
+  public Command stop() {
     return this.run(
       () -> m_drivetrain.tankDrive(0, 0)
     );
