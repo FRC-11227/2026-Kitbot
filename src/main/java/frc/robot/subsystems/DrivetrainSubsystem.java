@@ -22,11 +22,11 @@ import frc.robot.Constants.DriveConstants;;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   private final SparkMax m_leftLead;
-    private final SparkMax m_leftFollow;
-    private final SparkMax m_rightLead;
-    private final SparkMax m_rightFollow;
+  private final SparkMax m_leftFollow;
+  private final SparkMax m_rightLead;
+  private final SparkMax m_rightFollow;
 
-    private final DifferentialDrive m_drivetrain;
+  private final DifferentialDrive m_drivetrain;
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {

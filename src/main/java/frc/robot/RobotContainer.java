@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_DrivetrainSubsystem = new DrivetrainSubsystem();
+  private final BallSubsystem m_BallSubsystem = new BallSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -28,11 +30,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    // configureBindings();
+    configureBindings();
 
-    m_DrivetrainSubsystem.setDefaultCommand(
-        m_DrivetrainSubsystem.driveArcade(m_driverController::getLeftY, m_driverController::getLeftX)
-    );
+    
   }
 
   /**
@@ -44,15 +44,25 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  // private void configureBindings() {
-  //   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  //   new Trigger(m_shooterSubsystem::exampleCondition)
-  //       .onTrue(new ExampleCommand(m_shooterSubsystem));
+  private void configureBindings() {
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    // new Trigger(m_shooterSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_shooterSubsystem));
 
-  //   // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-  //   // cancelling on release.
-  //   m_driverController.b().whileTrue(m_shooterSubsystem.exampleMethodCommand());
-  // }
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+    m_driverController.rightBumper().whileTrue(m_BallSubsystem.shootSequence().finallyDo(() -> m_BallSubsystem.stop()));
+
+    m_driverController.leftBumper()
+        .whileTrue(m_BallSubsystem.runEnd(() -> m_BallSubsystem.intake(), () -> m_BallSubsystem.stop()));
+
+    m_driverController.a()
+        .whileTrue(m_BallSubsystem.runEnd(() -> m_BallSubsystem.eject(), () -> m_BallSubsystem.stop()));
+
+    m_DrivetrainSubsystem.setDefaultCommand(
+        m_DrivetrainSubsystem.driveArcade(m_driverController::getLeftY, m_driverController::getLeftX)
+    );
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -23,14 +23,29 @@ public final class Constants {
     public static final int DRIVETRAIN_LEFT_FOLLOW = 2;
     public static final int DRIVETRAIN_RIGHT_LEAD = 3;
     public static final int DRIVETRAIN_RIGHT_FOLLOW = 4;
-    public static final int SHOOTER_MOTOR = 5;
+    public static final int INTAKE_SHOOTER_MOTOR = 5;
     public static final int FEEDER_MOTOR = 6;
-    public static final int INTAKE_MOTOR = 7;
+  }
+
+  public static class MotorConstants {
+    public static final int CIM_CURRENT_LIMIT = 60;
   }
 
   public static class DriveConstants {
     // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
     // likelihood of tripping breakers or damaging CIM motors
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 60;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+  }
+
+  public static class BallConstants {
+    public static final int FEEDER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+    public static final int SHOOTER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+
+    public static final double DEFAULT_INTAKING_FEEDER_SPEED = -1;
+    public static final double DEFAULT_INTAKING_INTAKE_SPEED = 0.83;
+    public static final double DEFAULT_SPINUP_FEEDER_SPEED = -0.5;
+    public static final double DEFAULT_SHOOTING_FEEDER_SPEED = 0.75;
+    public static final double DEFAULT_SHOOTING_SHOOTER_SPEED =0.88;
+    public static final double SPIN_UP_SECONDS = 1; // Will be replaced with PID in the future
   }
 }
