@@ -28,7 +28,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private final DifferentialDrive m_drivetrain;
 
-  /** Creates a new ExampleSubsystem. */
+  /** Creates and configures a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
     m_leftLead = new SparkMax(CANConstants.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushless);
     m_leftFollow = new SparkMax(CANConstants.DRIVETRAIN_LEFT_FOLLOW, MotorType.kBrushless);
@@ -37,23 +37,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     SparkMaxConfig config = new SparkMaxConfig();
 
+    // Setup base config
     config
         .voltageCompensation(12)
         .smartCurrentLimit(DriveConstants.DRIVE_MOTOR_CURRENT_LIMIT)
         .idleMode(SparkMaxConfig.IdleMode.kBrake);
 
+    // Set leftFollow motor to follow the leftLead motor
     config.follow(m_leftLead);
     m_leftFollow.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    // Set rightFollow motor to follow the rightLead motor
     config.follow(m_rightLead);
     m_rightFollow.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    // Disable following and apply config to leftLead motor
     config.disableFollowerMode();
     m_leftLead.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    // Invert control, and apply config to rightLead motor
     config.inverted(true);
     m_rightLead.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+    // Create a DifferentialDrive object using the left and right leader motors
     m_drivetrain = new DifferentialDrive(m_leftLead, m_rightLead);
   }
 
