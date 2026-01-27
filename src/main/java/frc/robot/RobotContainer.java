@@ -53,7 +53,7 @@ public class RobotContainer {
 
     // Schedule `m_BallSubsystem.shootSequence()` when the Xbox controller's right bumper is pressed,
     // schedule ` m_BallSubsystem.stop()` when released
-    m_driverController.rightBumper().whileTrue(m_BallSubsystem.shootSequence().finallyDo(() -> m_BallSubsystem.stop()));
+    m_driverController.rightBumper().whileTrue(m_BallSubsystem.shootSequence());
 
     // Continuously schedule `m_BallSubsystem.intake()` while the Xbox controller's left bumper is pressed,
     // schedule ` m_BallSubsystem.stop()` when released
