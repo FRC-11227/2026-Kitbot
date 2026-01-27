@@ -51,16 +51,22 @@ public class RobotContainer {
     // new Trigger(m_shooterSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_shooterSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+    // Schedule `m_BallSubsystem.shootSequence()` when the Xbox controller's right bumper is pressed,
+    // schedule ` m_BallSubsystem.stop()` when released
     m_driverController.rightBumper().whileTrue(m_BallSubsystem.shootSequence().finallyDo(() -> m_BallSubsystem.stop()));
 
+    // Continuously schedule `m_BallSubsystem.intake()` while the Xbox controller's left bumper is pressed,
+    // schedule ` m_BallSubsystem.stop()` when released
     m_driverController.leftBumper()
         .whileTrue(m_BallSubsystem.runEnd(() -> m_BallSubsystem.intake(), () -> m_BallSubsystem.stop()));
 
+    // Continuously schedule `m_BallSubsystem.eject()` while the Xbox controller's A button is pressed,
+    // schedule ` m_BallSubsystem.stop()` when released.
     m_driverController.a()
         .whileTrue(m_BallSubsystem.runEnd(() -> m_BallSubsystem.eject(), () -> m_BallSubsystem.stop()));
 
+    // When no other command is being scheduled for m_DrivetrainSubsystem, run m_DrivetrainSubsystem.driveArcade
+    // with values from the left joystick
     m_DrivetrainSubsystem.setDefaultCommand(
         m_DrivetrainSubsystem.driveArcade(m_driverController::getLeftY, m_driverController::getLeftX)
     );
