@@ -4,11 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.BallConstants;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class Autos {
   public static Command driveAndTurn(DrivetrainSubsystem driveSubsystem) {
@@ -29,6 +29,25 @@ public final class Autos {
       // Drive backwards for 5 seconds
       driveSubsystem.driveArcade(() -> -0.5, () -> 0).withTimeout(5),
       // Stop the drivetrain
+      driveSubsystem.stop()
+    );
+  }
+
+  public static Command aftershootAndBackup(DrivetrainSubsystem driveSubsystem, BallSubsystem ballSubsystem) {
+    return Commands.sequence(
+      
+      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(5),
+
+      driveSubsystem.driveArcade(() -> 0, () -> 0.5).withTimeout(5),
+      
+      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 5),
+
+      driveSubsystem.driveArcade(() -> -0.5, () -> 0).withTimeout(2.5),
+
+      driveSubsystem.driveArcade(() -> 0, () -> 0.25).withTimeout(7),
+
+      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 5),
+      
       driveSubsystem.stop()
     );
   }
