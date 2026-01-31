@@ -40,7 +40,7 @@ public final class Autos {
   public static Command shootInCircle(DrivetrainSubsystem drivetrainSubsystem, BallSubsystem ballSubsystem, int numRotations, double rotationSpeed) {
     List<Command> commandList = new ArrayList<>();
 
-    for (var i = 0; i < numRotations; i++) {
+    for (int i = 0; i < numRotations; i++) {
       commandList.add(
         Commands.sequence(
           drivetrainSubsystem.driveTank(() -> rotationSpeed, () -> -rotationSpeed).withTimeout(1),
