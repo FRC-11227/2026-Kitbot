@@ -38,7 +38,7 @@ public final class Autos {
   }
 
   public static Command shootInCircle(DrivetrainSubsystem drivetrainSubsystem, BallSubsystem ballSubsystem, int numRotations, double rotationSpeed) {
-    List<Command> commandList = new ArrayList<>();
+    List<Command> commandList = new ArrayList<Command>();
 
     for (int i = 0; i < numRotations; i++) {
       commandList.add(
