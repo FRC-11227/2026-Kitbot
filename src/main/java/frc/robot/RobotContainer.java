@@ -79,6 +79,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.shootAndBackup(m_DrivetrainSubsystem, m_BallSubsystem);
+    return Autos.shootInCircle(m_DrivetrainSubsystem, m_BallSubsystem, 6, 0.5);
   }
 }

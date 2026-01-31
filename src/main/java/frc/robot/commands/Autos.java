@@ -7,6 +7,10 @@ package frc.robot.commands;
 import frc.robot.Constants.BallConstants;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -31,6 +35,21 @@ public final class Autos {
       // Stop the drivetrain
       driveSubsystem.stop()
     );
+  }
+
+  public static Command shootInCircle(DrivetrainSubsystem drivetrainSubsystem, BallSubsystem ballSubsystem, int numRotations, double rotationSpeed) {
+    List<Command> commandList = new ArrayList<>();
+
+    for (var i = 0; i < numRotations; i++) {
+      commandList.add(
+        Commands.sequence(
+          drivetrainSubsystem.driveTank(() -> rotationSpeed, () -> -rotationSpeed).withTimeout(1),
+          ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 3)
+        )
+      );
+    }
+    
+    return Commands.sequence(commandList.toArray(new Command[numRotations]));
   }
 
   private Autos() {
