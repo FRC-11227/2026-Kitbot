@@ -33,25 +33,6 @@ public final class Autos {
     );
   }
 
-  public static Command aftershootAndBackup(DrivetrainSubsystem driveSubsystem, BallSubsystem ballSubsystem) {
-    return Commands.sequence(
-      
-      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(5),
-
-      driveSubsystem.driveArcade(() -> 0, () -> 0.5).withTimeout(5),
-      
-      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 5),
-
-      driveSubsystem.driveArcade(() -> -0.5, () -> 0).withTimeout(2.5),
-
-      driveSubsystem.driveArcade(() -> 0, () -> 0.25).withTimeout(7),
-
-      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 5),
-      
-      driveSubsystem.stop()
-    );
-  }
-
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
