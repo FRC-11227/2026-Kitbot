@@ -17,7 +17,7 @@ public final class Autos {
         driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(2),
         // Stop for 1 second
         driveSubsystem.stop().withTimeout(1),
-        // Spin left at 30% speed for 1 second
+        // Spin right at 30% speed for 1 second
         driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(1)
     );
   }
@@ -29,6 +29,28 @@ public final class Autos {
       // Drive backwards for 5 seconds
       driveSubsystem.driveArcade(() -> -0.5, () -> 0).withTimeout(5),
       // Stop the drivetrain
+      driveSubsystem.stop()
+    );
+  }
+
+  public static Command driveInASquare(DrivetrainSubsystem driveSubsystem) {
+    return Commands.sequence(
+      // Drive forwards for 5 seconds
+      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(3),
+      // Spin right at 30% speed for 1 second
+      driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(2),
+      // Drive forwards for 5 seconds
+      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(3),
+      // Spin right at 30% speed for 1 second
+      driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(2),
+      // Drive forwards for 5 seconds
+      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(3),
+      // Spin right at 30% speed for 1 second
+      driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(2),
+      // Drive forwards for 5 seconds
+      driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(3),
+      // Spin right at 30% speed for 1 second
+      driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(2),
       driveSubsystem.stop()
     );
   }
