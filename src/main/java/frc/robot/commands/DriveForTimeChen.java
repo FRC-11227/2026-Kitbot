@@ -18,6 +18,9 @@ public class DriveForTimeChen extends Command {
   private final DoubleSupplier m_leftSpeed;
   private final DoubleSupplier m_rightSpeed;
   private final double m_runTime;
+  private Double r_leftSpeed;
+  private Double r_rightSpeed;
+
 
   private final Timer m_Timer;
 
@@ -42,12 +45,20 @@ public class DriveForTimeChen extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    r_leftSpeed = 0.0;
+    r_rightSpeed = 0.0;
     m_Timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (r_leftSpeed < m_leftSpeed.getAsDouble()) {
+      r_leftSpeed += 0.01;
+    }
+    if (r_rightSpeed < m_rightSpeed.getAsDouble()) {
+      r_rightSpeed += 0.01;
+    }
     if (m_Timer.get() < m_runTime / 3) { // at 1 third of the time drive forward
       m_drivetrain.tankDrive(m_leftSpeed, m_rightSpeed); 
     } else if (m_Timer.get() > m_runTime / 3 && m_Timer.get() < m_runTime / 2) {  // after 1 third and before half time rotate
