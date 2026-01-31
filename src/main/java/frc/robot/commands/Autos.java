@@ -33,6 +33,14 @@ public final class Autos {
     );
   }
 
+  public static Command fullTurn(DrivetrainSubsystem driveSubsystem){
+    return Commands.sequence(
+        driveSubsystem.driveArcade(() -> 1, () -> 1).withTimeout(2),
+        driveSubsystem.stop().withTimeout(1),
+        driveSubsystem.driveArcade(() -> -1, () -> -1).withTimeout(2)
+    );
+  }
+
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }

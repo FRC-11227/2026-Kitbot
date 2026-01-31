@@ -3,8 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 // Hello, world!
-Eric should get off clash
-
 // Hello world!
 
 // kayala

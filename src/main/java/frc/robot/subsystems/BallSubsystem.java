@@ -18,8 +18,8 @@ public class BallSubsystem extends SubsystemBase {
     
     /** Create a new BallSubsystem */
     public BallSubsystem() {
-        intakeShooterMotor = new SparkMax(CANConstants.INTAKE_SHOOTER_MOTOR, MotorType.kBrushed);
-        feederMotor = new SparkMax(CANConstants.FEEDER_MOTOR, MotorType.kBrushed);
+        intakeShooterMotor = new SparkMax(CANConstants.INTAKE_SHOOTER_MOTOR, MotorType.kBrushless);
+        feederMotor = new SparkMax(CANConstants.FEEDER_MOTOR, MotorType.kBrushless);
 
         SparkMaxConfig feederConfig = new SparkMaxConfig();
         feederConfig
