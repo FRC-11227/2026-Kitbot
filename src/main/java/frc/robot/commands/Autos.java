@@ -55,6 +55,16 @@ public final class Autos {
     );
   }
 
+  public static Command spinAndShoot(DrivetrainSubsystem driveSubsystem, BallSubsystem ballSubsystem) {
+    return Commands.sequence(
+      // Spin up and shoot for 3 seconds
+      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 3),
+      // Spin full right for 3 seconds
+      driveSubsystem.driveArcade(() -> 0, () -> 1).withTimeout(3),
+      driveSubsystem.stop()
+    );
+  }
+
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
   }
