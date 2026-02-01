@@ -29,6 +29,7 @@ public final class Constants {
 
   public static class MotorConstants {
     public static final int CIM_CURRENT_LIMIT = 60;
+    public static final int NEO_CURRENT_LIMIT = 40;
   }
 
   public static class DriveConstants {
@@ -38,8 +39,8 @@ public final class Constants {
   }
 
   public static class BallConstants {
-    public static final int FEEDER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
-    public static final int SHOOTER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+    public static final int FEEDER_MOTOR_CURRENT_LIMIT = MotorConstants.NEO_CURRENT_LIMIT;
+    public static final int SHOOTER_MOTOR_CURRENT_LIMIT = MotorConstants.NEO_CURRENT_LIMIT;
 
     public static final double DEFAULT_INTAKING_FEEDER_SPEED = -1;
     public static final double DEFAULT_INTAKING_INTAKE_SPEED = 0.83;

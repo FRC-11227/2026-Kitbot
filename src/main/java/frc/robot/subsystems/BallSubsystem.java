@@ -18,8 +18,8 @@ public class BallSubsystem extends SubsystemBase {
     
     /** Create a new BallSubsystem */
     public BallSubsystem() {
-        intakeShooterMotor = new SparkMax(CANConstants.INTAKE_SHOOTER_MOTOR, MotorType.kBrushed);
-        feederMotor = new SparkMax(CANConstants.FEEDER_MOTOR, MotorType.kBrushed);
+        intakeShooterMotor = new SparkMax(CANConstants.INTAKE_SHOOTER_MOTOR, MotorType.kBrushless);
+        feederMotor = new SparkMax(CANConstants.FEEDER_MOTOR, MotorType.kBrushless);
 
         SparkMaxConfig feederConfig = new SparkMaxConfig();
         feederConfig
@@ -28,7 +28,7 @@ public class BallSubsystem extends SubsystemBase {
         feederMotor.configure(feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         SparkMaxConfig intakeShooterConfig = new SparkMaxConfig();
-        feederConfig
+        intakeShooterConfig
             .smartCurrentLimit(BallConstants.SHOOTER_MOTOR_CURRENT_LIMIT)
             .voltageCompensation(12)
             .inverted(true);
