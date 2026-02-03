@@ -25,6 +25,10 @@ public final class Autos2 {
 
   public static Command aftershootAndBackup(DrivetrainSubsystem driveSubsystem, BallSubsystem ballSubsystem) {
     return Commands.sequence(
+
+      driveSubsystem.driveArcade(() -> 0, () -> 0.3).withTimeout(5),
+
+      driveSubsystem.driveArcade(() -> 0, () -> -0.3).withTimeout(5),
       
       driveSubsystem.driveArcade(() -> 0.25, () -> 0).withTimeout(5),
 
