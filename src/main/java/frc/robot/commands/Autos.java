@@ -15,6 +15,7 @@ public final class Autos {
     return Commands.sequence(
         // Drive forward at 50% speed for 2 seconds
         driveSubsystem.driveArcade(() -> 0.5, () -> 0).withTimeout(2),
+
         // Stop for 1 second
         driveSubsystem.stop().withTimeout(1),
         // Spin right at 30% speed for 1 second
@@ -26,8 +27,10 @@ public final class Autos {
     return Commands.sequence(
       // Run the shoot sequence
       ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 5),
+
       // Drive backwards for 5 seconds
       driveSubsystem.driveArcade(() -> -0.5, () -> 0).withTimeout(5),
+      
       // Stop the drivetrain
       driveSubsystem.stop()
     );
@@ -63,6 +66,10 @@ public final class Autos {
       driveSubsystem.driveArcade(() -> 0, () -> 1).withTimeout(3),
       driveSubsystem.stop()
     );
+  }
+
+  public static Command spin180(DrivetrainSubsystem driveSubsystem) {
+    return driveSubsystem.rotateDegrees(150.0);
   }
 
   private Autos() {
