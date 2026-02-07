@@ -4,21 +4,25 @@
 
 package frc.robot.commands;
 
-
+import frc.robot.Constants.BallConstants;
+import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+
 
 public final class autotest2 { 
-  public static Command driveAndTurn(DrivetrainSubsystem driveSubsystem) {
+  public static Command driveandturn(DrivetrainSubsystem driveSubsystem, BallSubsystem ballSubsystem) {
     return Commands.sequence(
 
       driveSubsystem.driveArcade(() -> 0.15, () -> 0).withTimeout(2),
 
       driveSubsystem.stop().withTimeout(0.5),
 
-      driveSubsystem.driveArcade(() -> 0,  ()-> 0.25).withTimeout(0.5)
+      driveSubsystem.driveArcade(() -> 0,  ()-> 0.25).withTimeout(1),
+      
+      ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 6),
+      driveSubsystem.stop()
    
     );
   }

@@ -30,10 +30,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   /** Creates and configures a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
-    m_leftLead = new SparkMax(CANConstants.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushless);
-    m_leftFollow = new SparkMax(CANConstants.DRIVETRAIN_LEFT_FOLLOW, MotorType.kBrushless);
-    m_rightLead = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_LEAD, MotorType.kBrushless);
-    m_rightFollow = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_FOLLOW, MotorType.kBrushless);
+    m_leftLead = new SparkMax(CANConstants.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushed);
+    m_leftFollow = new SparkMax(CANConstants.DRIVETRAIN_LEFT_FOLLOW, MotorType.kBrushed);
+    m_rightLead = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_LEAD, MotorType.kBrushed);
+    m_rightFollow = new SparkMax(CANConstants.DRIVETRAIN_RIGHT_FOLLOW, MotorType.kBrushed);
 
     SparkMaxConfig config = new SparkMaxConfig();
 
