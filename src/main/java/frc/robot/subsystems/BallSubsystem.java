@@ -28,7 +28,7 @@ public class BallSubsystem extends SubsystemBase {
         feederMotor.configure(feederConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         SparkMaxConfig intakeShooterConfig = new SparkMaxConfig();
-        feederConfig
+        intakeShooterConfig
             .smartCurrentLimit(BallConstants.SHOOTER_MOTOR_CURRENT_LIMIT)
             .voltageCompensation(12)
             .inverted(true);

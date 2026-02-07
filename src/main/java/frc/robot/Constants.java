@@ -29,17 +29,36 @@ public final class Constants {
 
   public static class MotorConstants {
     public static final int CIM_CURRENT_LIMIT = 60;
+    public static final int NEO_CURRENT_LIMIT = 40;
   }
 
   public static class DriveConstants {
     // Current limit for drivetrain motors. 60A is a reasonable maximum to reduce
     // likelihood of tripping breakers or damaging CIM motors
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+
+    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
+    // These values MUST be determined either experimentally or theoretically for *your* robot's
+    // drive. The SysId tool provides a convenient method for obtaining feedback and feedforward
+    // values for your robot.
+    public static final double kTurnP = 0.8;
+    public static final double kTurnI = 0;
+    public static final double kTurnD = 0;
+
+    public static final double kTurnToleranceDeg = 5;
+    public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
+
+    public static final double kMaxTurnRateDegPerS = 100;
+    public static final double kMaxTurnAccelerationDegPerSSquared = 300;
+
+    public static final double ksVolts = 1;
+    public static final double kvVoltSecondsPerDegree = 0.8;
+    public static final double kaVoltSecondsSquaredPerDegree = 0.15;
   }
 
   public static class BallConstants {
-    public static final int FEEDER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
-    public static final int SHOOTER_MOTOR_CURRENT_LIMIT = MotorConstants.CIM_CURRENT_LIMIT;
+    public static final int FEEDER_MOTOR_CURRENT_LIMIT = MotorConstants.NEO_CURRENT_LIMIT;
+    public static final int SHOOTER_MOTOR_CURRENT_LIMIT = MotorConstants.NEO_CURRENT_LIMIT;
 
     public static final double DEFAULT_INTAKING_FEEDER_SPEED = -1;
     public static final double DEFAULT_INTAKING_INTAKE_SPEED = 0.83;
