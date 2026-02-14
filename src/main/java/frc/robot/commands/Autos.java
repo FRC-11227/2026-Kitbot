@@ -43,7 +43,8 @@ public final class Autos {
     for (int i = 0; i < numRotations; i++) {
       commandList.add(
         Commands.sequence(
-          drivetrainSubsystem.driveTank(() -> rotationSpeed, () -> -rotationSpeed).withTimeout(1),
+          drivetrainSubsystem.driveTank(() -> rotationSpeed, () -> -rotationSpeed).withTimeout(2),
+          drivetrainSubsystem.stop(),
           ballSubsystem.shootSequence().withTimeout(BallConstants.SPIN_UP_SECONDS + 3)
         )
       );

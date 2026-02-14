@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public Command driveArcade(DoubleSupplier speed, DoubleSupplier rotation) {
     return this.run(
       () -> m_drivetrain.curvatureDrive(speed.getAsDouble(), rotation.getAsDouble(), true));
-  }
+  } 
 
   /**
    * Control the robot using a "Tank Drive" style of control
