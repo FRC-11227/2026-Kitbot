@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.Autos2;
 import frc.robot.subsystems.BallSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -81,7 +80,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.shootAndBackup(m_DrivetrainSubsystem, m_BallSubsystem);
-    return Autos2.aftershootAndBackup(m_DrivetrainSubsystem, m_BallSubsystem);
     return Autos.spin180(m_DrivetrainSubsystem);
   }
 }
