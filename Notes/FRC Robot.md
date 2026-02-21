@@ -21,3 +21,4 @@ Motor num = 3
 intake to shooter (constant) to get the fuel ready to be shot
 
 shooter will only be ran with command
+
