@@ -150,11 +150,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // if it is too high, the robot will oscillate.
     // if it is too low, the robot will never reach its target
     // if the robot never turns in the correct direction, kP should be inverted.
-    double kP = .035;
 
-    // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
-    // your limelight 3 feed, tx should return roughly 31 degrees.
-    double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+    double kP = .035;
+    double kI = .000;
+    double kD = .00001;
+    double integral = 0;
+    double prevError = 0;
+    double error = LimelightHelpers.getTX("limelight");
+    integral += error * 0.02; 
+    double derivative = (error - prevError) / 0.02;
+    double targetingAngularVelocity = (kP * error) + (kI * integral) + (kD * derivative);
+    prevError = error;
 
     // convert to radians per second for our drive method
     targetingAngularVelocity *= Math.PI;
