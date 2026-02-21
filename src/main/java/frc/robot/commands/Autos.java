@@ -44,6 +44,9 @@ public final class Autos {
   public static Command rotateToTag(DrivetrainSubsystem drivetrainSubsystem) {
     return drivetrainSubsystem.rotateToTarget();
   }
+  public static Command rotate90(DrivetrainSubsystem drivetrainSubsystem) {
+    return drivetrainSubsystem.rotate90();
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
