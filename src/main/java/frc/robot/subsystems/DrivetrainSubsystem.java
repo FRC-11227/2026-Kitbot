@@ -152,12 +152,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Command rotateToTarget() {
-    return run(() -> driveArcade(() -> 0, () -> limelight_aim_proportional()));
+    return run(() -> m_drivetrain.arcadeDrive(0, limelight_aim_proportional()));
   }
-
-  public Command rotate90() {
-    return run(() -> driveArcade(() -> 0, () -> 90));
-  } 
 
   public Command moveForward(Double speed) {
     return run(() -> m_drivetrain.arcadeDrive(speed, 0));

@@ -79,7 +79,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return Autos.rotateToTag(m_DrivetrainSubsystem);
-    return Autos.rotate90(m_DrivetrainSubsystem);
+    return Autos.rotateToTag(m_DrivetrainSubsystem);
   }
 }
