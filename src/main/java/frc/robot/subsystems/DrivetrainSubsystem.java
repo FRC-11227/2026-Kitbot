@@ -53,6 +53,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   static final double kP = 0.03;
 
+  private static PIDController aimController = new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD);
+
+
   /** Creates and configures a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
     m_leftLead = new SparkMax(CANConstants.DRIVETRAIN_LEFT_LEAD, MotorType.kBrushed);
@@ -143,31 +146,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         .finallyDo(() -> m_drivetrain.arcadeDrive(0, 0)).withName("Rotating robot");
   }
 
-  double limelight_aim_proportional()
-  {    
-    // kP (constant of proportionality)
-    // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
-    // if it is too high, the robot will oscillate.
-    // if it is too low, the robot will never reach its target
-    // if the robot never turns in the correct direction, kP should be inverted.
-
-    double kP = .035;
-    double kI = .000;
-    double kD = .00001;
-    double integral = 0;
-    double prevError = 0;
-    double error = LimelightHelpers.getTX("limelight");
-    integral += error * 0.02; 
-    double derivative = (error - prevError) / 0.02;
-    double targetingAngularVelocity = (kP * error) + (kI * integral) + (kD * derivative);
-    prevError = error;
-
-    // convert to radians per second for our drive method
-    targetingAngularVelocity *= Math.PI;
-
-    //invert since tx is positive when the target is to the right of the crosshair
-    targetingAngularVelocity *= -1.0;
-
+  public static double limelight_aim_proportional() {    
+    double targetingAngularVelocity = -aimController.calculate(LimelightHelpers.getTX("limelight")) * Math.PI;
     return targetingAngularVelocity;
   }
 
