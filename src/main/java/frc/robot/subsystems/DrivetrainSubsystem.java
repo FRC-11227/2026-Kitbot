@@ -7,18 +7,27 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import java.util.function.DoubleSupplier;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.CANConstants;
-import frc.robot.Constants.DriveConstants;;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.LimelightHelpers;;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   private final SparkMax m_leftLead;
@@ -27,6 +36,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final SparkMax m_rightFollow;
 
   private final DifferentialDrive m_drivetrain;
+
+  private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
+
+  private final ProfiledPIDController m_controller = new ProfiledPIDController(
+      DriveConstants.kTurnP,
+      DriveConstants.kTurnI,
+      DriveConstants.kTurnD,
+      new TrapezoidProfile.Constraints(
+          DriveConstants.kMaxTurnRateDegPerS,
+          DriveConstants.kMaxTurnAccelerationDegPerSSquared));
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(
+      DriveConstants.ksVolts,
+      DriveConstants.kvVoltSecondsPerDegree,
+      DriveConstants.kaVoltSecondsSquaredPerDegree);
+
+  static final double kP = 0.03;
 
   /** Creates and configures a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
@@ -67,31 +92,85 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Stops the drivetrain and sets all motors to 0
    */
   public Command stop() {
-    return this.run(
-      () -> m_drivetrain.tankDrive(0, 0)
-    );
+    return this.run(() -> m_drivetrain.tankDrive(0, 0));
   }
 
   /**
    * Control the robot using an "Arcade Drive" style of control
    * 
-   * @param speed Forward-back speed of the robot (where -1.0 is full backwards, and 1.0 is full forwards)
-   * @param rotation Left-right speed of the robot (where -1.0 is full left, and 1.0 is full right)
+   * @param speed    Forward-back speed of the robot (where -1.0 is full
+   *                 backwards, and 1.0 is full forwards)
+   * @param rotation Left-right speed of the robot (where -1.0 is full left, and
+   *                 1.0 is full right)
    */
   public Command driveArcade(DoubleSupplier speed, DoubleSupplier rotation) {
-    return this.run(
-      () -> m_drivetrain.curvatureDrive(speed.getAsDouble(), rotation.getAsDouble(), true));
+    return this.run(() -> m_drivetrain.curvatureDrive(speed.getAsDouble(), rotation.getAsDouble(), true));
   }
 
   /**
    * Control the robot using a "Tank Drive" style of control
    * 
-   * @param leftSpeed Speed for the left wheels of the robot (where -1.0 is full backwards, and 1.0 is full forwards)
-   * @param rotation Speed for the right wheels of the robot (where -1.0 is full left, and 1.0 is full right)
+   * @param leftSpeed Speed for the left wheels of the robot (where -1.0 is full
+   *                  backwards, and 1.0 is full forwards)
+   * @param rotation  Speed for the right wheels of the robot (where -1.0 is full
+   *                  left, and 1.0 is full right)
    */
   public Command driveTank(DoubleSupplier leftSpeed, DoubleSupplier rightSpeed) {
-    return this.run(
-      () -> m_drivetrain.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble()));
+    return this.run(() -> m_drivetrain.tankDrive(leftSpeed.getAsDouble(), rightSpeed.getAsDouble()));
+  }
+
+  public Command resetGyro() {
+    return this.runOnce(() -> m_gyro.reset());
+  }
+
+  public Command rotateDegrees(Double setpoint) {
+    return startRun(
+        () -> {
+          m_controller.reset(m_gyro.getRotation2d().getDegrees());
+        },
+        () -> {
+          m_drivetrain.arcadeDrive(
+            0,
+            (m_controller.calculate(m_gyro.getRotation2d().getDegrees(), setpoint)
+                // Divide feedforward voltage by battery voltage to normalize it to [-1, 1]
+                + m_feedforward.calculate(m_controller.getSetpoint().velocity) / RobotController.getBatteryVoltage()) * -1);
+          
+          System.out.println(m_gyro.getRotation2d().getDegrees());
+          }
+        )
+
+        .until(m_controller::atGoal)
+        .finallyDo(() -> m_drivetrain.arcadeDrive(0, 0)).withName("Rotating robot");
+  }
+
+  double limelight_aim_proportional()
+  {    
+    // kP (constant of proportionality)
+    // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
+    // if it is too high, the robot will oscillate.
+    // if it is too low, the robot will never reach its target
+    // if the robot never turns in the correct direction, kP should be inverted.
+    double kP = .035;
+
+    // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
+    // your limelight 3 feed, tx should return roughly 31 degrees.
+    double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+
+    // convert to radians per second for our drive method
+    targetingAngularVelocity *= Math.PI;
+
+    //invert since tx is positive when the target is to the right of the crosshair
+    targetingAngularVelocity *= -1.0;
+
+    return targetingAngularVelocity;
+  }
+
+  public Command rotateToTarget() {
+    return run(() -> m_drivetrain.arcadeDrive(0, limelight_aim_proportional()));
+  }
+
+  public Command moveForward(Double speed) {
+    return run(() -> m_drivetrain.arcadeDrive(speed, 0));
   }
 
   @Override
