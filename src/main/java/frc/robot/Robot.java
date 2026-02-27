@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,8 +18,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  // Get the default instance of NetworkTables that was created automatically
 
   private final RobotContainer m_robotContainer;
+
+  DoublePublisher targetingAngularVelocityPub;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -26,6 +32,16 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    // when the robot program starts
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    // Get the table within that instance that contains the data. There can
+    // be as many tables as you like and exist to make it easier to organize
+    // your data. In this case, it's a table called datatable.
+    NetworkTable table = inst.getTable("datatable");
+    // Start publishing topics within that table that correspond to the X and Y values
+    // for some operation in your program.
+    // The topic names are actually "/datatable/x" and "/datatable/y".
+    targetingAngularVelocityPub = table.getDoubleTopic("targetingAngularVelocity").publish();
   }
 
   /**
@@ -64,7 +80,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    double targetingAngularVelocity = frc.robot.subsystems.DrivetrainSubsystem.limelight_aim_proportional();
+    targetingAngularVelocityPub.set(targetingAngularVelocity);
+  }
 
   @Override
   public void teleopInit() {
